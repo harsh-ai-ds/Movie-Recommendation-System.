@@ -1,5 +1,5 @@
 import os
-import pickle
+import joblib  # Use joblib for efficient memory mapping
 import pandas as pd
 import requests
 from flask import Flask, jsonify, render_template, request
@@ -10,17 +10,16 @@ app = Flask(__name__)
 # --- LOAD LOCAL ML DATA & MODELS ON STARTUP ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Load pickle files safely
-movies_dict = pickle.load(
-    open(os.path.join(script_dir, "movie_dict.pkl"), "rb")
-)
+# Load metadata normally (small file)
+movies_dict = joblib.load(os.path.join(script_dir, "movie_dict.pkl"))
 movies = pd.DataFrame(movies_dict)
 
-similarity = pickle.load(
-    open(os.path.join(script_dir, "similarity.pkl"), "rb")
+# Load massive arrays using mmap_mode='r' to prevent RAM overload
+similarity = joblib.load(
+    os.path.join(script_dir, "similarity.pkl"), mmap_mode="r"
 )
-movie_embeddings = pickle.load(
-    open(os.path.join(script_dir, "movie_embeddings.pkl"), "rb")
+movie_embeddings = joblib.load(
+    os.path.join(script_dir, "movie_embeddings.pkl"), mmap_mode="r"
 )
 
 # Load lightweight sentence transformer model
