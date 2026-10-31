@@ -32,7 +32,7 @@ TMDB_API_KEY = "75abee69f215d836dbd71095ae7c151f"  # Replace with your TMDB API 
 # --- HELPER FUNCTIONS FOR TMDB API ---
 def fetch_poster(movie_id):
   try:
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={"75abee69f215d836dbd71095ae7c151f"}"
+    url = {f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={"75abee69f215d836dbd71095ae7c151f"}"}
     res = requests.get(url, timeout=5).json()
     if "poster_path" in res and res["poster_path"]:
       return "https://image.tmdb.org/t/p/w500/" + res["poster_path"]
