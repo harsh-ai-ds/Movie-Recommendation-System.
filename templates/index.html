@@ -3,55 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Recommender Hub</title>
+    <title>Cineflix - Professional Movie Recommender</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <header>
-        <h1>🎥 AI Movie Recommender </h1>
-        <p>Discover movies using classic similarity or local semantic AI mode </p>
+    <!-- Professional Sticky Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-left">
+            <h1>🎥 Cineflix</h1>
+            <div class="tabs">
+                <button id="tabClassicBtn" class="tab-btn active" onclick="switchTab('classic')">Classic Mode</button>
+                <button id="tabMoodBtn" class="tab-btn" onclick="switchTab('mood')">AI Mode</button>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Mode 1: Classic Movie Search Input -->
+            <div id="classicSection" class="section active">
+                <div class="input-group">
+                    <input type="text" id="movieSelect" list="movieOptions" placeholder="Search movie (e.g. Avatar)...">
+                    <datalist id="movieOptions">
+                        {% for movie in movie_list %}
+                            <option value="{{ movie }}">
+                        {% endfor %}
+                    </datalist>
+                    <button onclick="getMovieRecommendations()">Search</button>
+                </div>
+            </div>
+
+            <!-- Mode 2: AI Mood Search Input -->
+            <div id="moodSection" class="section">
+                <div class="input-group">
+                    <input type="text" id="moodInput" placeholder="Describe mood or plot...">
+                    <button onclick="getMoodRecommendations()">Find</button>
+                </div>
+            </div>
+        </div>
     </header>
 
+    <!-- Cinematic Hero Banner -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <h2>Unlimited Movies, AI Matching & Streaming</h2>
+            <p>Explore thousands of Hollywood & Indian cinema titles instantly. Search by your favorite movie or let our AI find the exact mood you're craving.</p>
+        </div>
+    </section>
+
+    <!-- Main Results Viewport -->
     <main class="container">
-        <!-- Control Tabs -->
-        <div class="tabs">
-            <button id="tabClassicBtn" class="tab-btn active" onclick="switchTab('classic')">Classic Mode</button>
-            <button id="tabMoodBtn" class="tab-btn" onclick="switchTab('mood')"> AI Mode </button>
-        </div>
-
-        <!-- Mode 1: Classic Search -->
-        <!-- Mode 1: Classic Movie Search -->
-        <div id="classicSection" class="section active">
-            <label for="movieSelect">Search for a movie you love:</label>
-            <div class="input-group">
-                <!-- Text input with native autocomplete datalist -->
-                <input type="text" id="movieSelect" list="movieOptions" placeholder="Type a movie name (e.g., Avatar, Batman)...">
-                <datalist id="movieOptions">
-                    {% for movie in movie_list %}
-                        <option value="{{ movie }}">
-                    {% endfor %}
-                </datalist>
-                <button onclick="getMovieRecommendations()">Search</button>
-            </div>
-        </div>
-
-        <!-- Mode 2: AI Mood Search -->
-        <div id="moodSection" class="section">
-            <label for="moodInput">Describe the story, mood, or plot you want to watch:</label>
-            <div class="input-group">
-                <input type="text" id="moodInput" placeholder="e.g., A mind-bending sci-fi thriller set in outer space">
-                <button onclick="getMoodRecommendations()">Find Matches</button>
-            </div>
-        </div>
-
-        <!-- Loading Spinner -->
         <div id="loading" class="hidden">
             <div class="spinner"></div>
-            <p>Fetching recommendations & metadata...</p>
+            <p style="color: #aaa; font-size: 1.1rem;">Curating cinematic recommendations...</p>
         </div>
 
-        <!-- Recommendations Display Grid -->
         <div id="resultsGrid" class="grid-container"></div>
     </main>
 
